@@ -1,40 +1,27 @@
 type Operation = "add" | "subtract" | "multiply" | "divide" | "modulus";
-type InputValue = number | number[];
 
-function calculate(op: Operation, a: InputValue, b?: number): number {
-    if (Array.isArray(a)) {
+function calculate(op: Operation, ...values: number[]): number {
         switch (op) {
             case "add":
-                return a.reduce((acc, val) => acc + val, 0);
-            case "multiply":
-                return a.reduce((acc, val) => acc * val, 1);
-            default:
-                throw new Error("Invalid operation for array input");
-        }
-    } else {
-        switch (op) {
-            case "add":
-                return a + (b as number);
+                return values.reduce((acc, val) => acc + val, 0);
             case "subtract":
-                return a - (b as number);
+                return values.reduce((acc, val) => acc - val)
             case "multiply":
-                return a * (b as number);
+                return values.reduce((acc, val) => acc * val, 1);
             case "divide":
-                if (b === 0) throw new Error("Cannot divide by zero");
-                return a / (b as number);
+                return values.reduce((acc, val) => {
+                    if(val === 0) throw new Error('can not devide by zero');
+                    return acc / val
+                });
             case "modulus":
-                return a % (b as number);
+                return values.reduce((acc, val) => acc % val);
             default:
                 throw new Error("Invalid operation");
         }
-    }
 }
 
-console.log(calculate("add", 5, 3)); // Output: 8
-console.log(calculate("subtract", 5, 3)); // Output: 2
-console.log(calculate("multiply", 5, 3)); // Output: 15
-console.log(calculate("divide", 6, 3)); // Output: 2
-console.log(calculate("modulus", 7, 3)); // Output: 1
-
-console.log(calculate("add", [1, 2, 3, 4])); // Output: 10
-console.log(calculate("multiply", [1, 2, 3, 4])); // Output: 24
+console.log(calculate("add", 1, 2, 3, 4)); // Output: 10
+console.log(calculate("subtract", 10, 2, 1)); // Output: 7
+console.log(calculate("multiply", 2, 3, 4)); // Output: 24
+console.log(calculate("divide", 100, 2, 5)); // Output: 10
+console.log(calculate("modulus", 10, 3)); // Output: 1
